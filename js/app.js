@@ -20,6 +20,34 @@ demoApp.config(['$routeProvider', function($routeProvider) {
     templateUrl: 'partials/llamalist.html',
     controller: 'LlamaListController'
   }).
+  when("/userlist", {
+    templateUrl:"partials/userlist.html", 
+    controller:"UsersController" 
+  }).
+  when("/addUserView", {
+    templateUrl:"partials/addUserView.html", 
+    controller:"AddUserController" 
+  }).
+  when("/userDetails", {
+    templateUrl:"partials/userDetails.html",
+    controller:"UserDetailController"
+  }).
+  when("/tasklist", {
+    templateUrl:"partials/tasklist.html",
+    controller:"TasksController"
+  }).
+  when("/taskDetails", {
+    templateUrl:"partials/taskDetails.html",
+    controller:"TaskDetailController"
+  }).
+  when("/edittask", {
+    templateUrl:"partials/edittask.html",
+    controller:"EditTaskController"
+  }).
+  when("/addtask", {
+    templateUrl:"partials/addtask.html",
+    controller:"NewTaskController"
+  }).
   otherwise({
     redirectTo: '/settings'
   });
