@@ -103,6 +103,32 @@ demoControllers.controller('AddUserController', ['$scope', '$http', 'Users', '$w
   };
 }]);
 
+demoControllers.controller('UserDetailController', ['$scope', '$http', 'Users', 'Tasks', '$routeParams','$window', function($scope, $http, Users, Tasks, $routeParams, $window) {
+  console.log("inside userdetail controller");
+  Users.getUser($routeParams.id, function(user) {
+     $scope.user = user;
+     console.log(user);
+
+    Tasks.getUserTasks(user._id, function(tasks) {
+      $scope.tasks = tasks;
+    });
+  });
+
+  // $scope.loadCompleted = function() {
+  //   Tasks.getCompletedUserTasks($routeParams.id, function(data, err) {
+  //     $scope.completedTasks = data;
+  //     $scope.errorMes = err;
+  //   });
+  // };
+
+  // $scope.completeTask = function(index, id) {
+  //   Tasks.editTask({_id: id, completed: true}, function(data, err) {
+  //     $scope.errorMes = err;
+  //     $scope.tasks.splice(index, 1);
+  //   });
+  // };
+}]);
+
 demoControllers.controller('LlamaListController', ['$scope', '$http', 'Llamas', '$window' , function($scope, $http,  Llamas, $window) {
 
   Llamas.get().success(function(data){

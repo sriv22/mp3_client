@@ -28,10 +28,14 @@ demoApp.config(['$routeProvider', function($routeProvider) {
     templateUrl:"partials/addUserView.html", 
     controller:"AddUserController" 
   }).
-  when("/userDetails", {
+  when("/userlist/:id", {
     templateUrl:"partials/userDetails.html",
     controller:"UserDetailController"
   }).
+  // when("/userDetails", {
+  //   templateUrl:"partials/userDetails.html",
+  //   controller:"UserDetailController"
+  // }).
   when("/tasklist", {
     templateUrl:"partials/tasklist.html",
     controller:"TasksController"
