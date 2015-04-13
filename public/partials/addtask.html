@@ -1,6 +1,5 @@
 <div class="list" ng-controller='NewTaskController'>
-  Add Task
-  {{errorMes}}
+  <center> <h1> Add Task {{errorMes}} </h1></center>
 	<form>
 	  <div class="row">
         <div class="small-12 columns">
@@ -8,7 +7,7 @@
           Name: <input type="text" ng-model="newTask.name" />
           Description: <input type="text" ng-model="newTask.description" />
           <span ng-show="showMissingFields && !newTask.deadline" style="color: red">*</span>
-          Deadline: <input type="date" ng-model="task.deadline" />
+          Deadline: <input type="date" ng-model="newTask.deadline" />
           User:
           <select ng-model="selectedUser" />
             <option ng-repeat="user in users" value="{{$index}}">{{user.name}}</option>
@@ -17,7 +16,7 @@
     </div>
 
     <div class="text-center">
-      <button ng-click="createTask()" class="button tiny info">Set Data</button>
+      <button ng-click="createTask()" class="button tiny info">Add Task</button>
     </div>
 
     {{displayText}}

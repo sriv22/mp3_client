@@ -2,13 +2,13 @@
 
 function getRequest(http, window, _data, path, cb) {
   if(_data !== null) cb(_data);
-  console.log(getBaseUrl(window)+path);
+  // console.log(getBaseUrl(window)+path);
   http.get(getBaseUrl(window) + path)
     .success(function(data, status, headers, config) {
       _data = data.data;
-      console.log("in getRequest");
-      console.log(path);
-      console.log(_data);
+      // console.log("in getRequest");
+      // console.log(path);
+      // console.log(_data);
       // console.log(_data);
       cb(_data, "");
     })
@@ -113,11 +113,6 @@ angular.module('demoServices', [])
                 getRequest($http, $window, _data, '/api/tasks?where={"assignedUser": "'+ id + '", "completed": true}', cb);
             },
             getTask : function(id, cb) {
-                // console.log(id);
-                console.log("in services getTask");
-                console.log(id);
-                console.log("response of teh call");
-                console.log(getRequest($http, $window, _data, '/api/tasks/' + id));
                 getRequest($http, $window, _data, '/api/tasks/' + id, cb);
             },
             editTask : function(task, cb) {

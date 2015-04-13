@@ -1,6 +1,5 @@
 <div class="list" ng-controller='AddUserController'>
-  Add User
-  {{errorMes}}
+  <center> <h1> Add User {{errorMes}} </h1></center>
   <form>
     <div class="row">
         <div class="small-12 columns">
@@ -10,7 +9,7 @@
     </div>
 
     <div class="text-center">
-      <button ng-click="setData(username,useremail)" class="button tiny info">Set Data</button>
+      <button ng-click="setData(username,useremail)" class="button tiny info">Add User</button>
     </div>
 
     {{displayText}}

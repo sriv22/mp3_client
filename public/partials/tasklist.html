@@ -1,10 +1,10 @@
 <div class="list" ng-controller='TasksController'>
   <!-- {{errorMes}} -->
   <div class="row">
-    Tasks
-
+    <center>
+    <h1>Tasks</h1>
     <a class="button default" href="#/addtask">New Task</a>
-
+    </center>
     <h3>Filter</h3>
     <form>
       <input ng-model="taskRadioFilter" name="radioFilter" ng-value="" type="radio"> All
@@ -39,15 +39,13 @@
   </div>
 
   <ul>
-    <!-- <li ng-repeat="task in tasks | pagination:curPage*10 | filter: {completed: taskRadioFilter} | limitTo:10"> pagination:curPage*10  -->
     <li ng-repeat="task in tasks | pagination:curPage*10 |filter: {completed: taskRadioFilter} | orderBy:[fil,chron]| limitTo:10">
       <div class="row">
         <div class="small-4 columns">
-          <!-- <a href="#/taskDetails/{{task._id}}"<span ng-bind="task.name"></span></a> -->
           <a href="#/tasklist/{{task._id}}"><div class="task-name"> {{task.name}}</div></a>
         </div>
         <div class="small-5 columns">
-          <span ng-bind="task.assignedUser"></span>
+          <span ng-bind="task.assignedUserName">{</span>
         </div>
         <div class="small-3 columns">
           <button ng-click="deleteTask(task._id, $index)" class="button tiny alert">Delete Task</button>

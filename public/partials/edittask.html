@@ -1,6 +1,6 @@
 <div class="list" ng-controller='EditTaskController'>
-  Edit Task
-  {{errorMes}}
+  <center> <h1> Edit Task {{errorMes}} </h1></center>
+
 	<form>
 	  <div class="row">
         <div class="small-12 columns">
@@ -22,7 +22,7 @@
     </div>
 
     <div class="text-center">
-      <button ng-click="editTask()" class="button tiny info">Set Data</button>
+      <button ng-click="editTask()" class="button tiny info">Update Task</button>
     </div>
 
     {{displayText}}

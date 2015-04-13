@@ -1,18 +1,31 @@
 var demoControllers = angular.module('demoControllers', []);
 
-demoControllers.controller('UsersController', ['$scope', '$http', 'Users', '$window' , function($scope, $http,  Users, $window) {
+demoControllers.controller('UsersController', ['$scope', '$http', 'Users', 'Tasks', '$window' , function($scope, $http,  Users, Tasks, $window) {
 
   Users.get().success(function(data){
     $scope.users = data['data'];
   });
 
   $scope.deleteUser = function(index, id) {
+    Tasks.getUserTasks(id, function(tasks) {
+      $scope.tasks = tasks;
+      for(var i=0; i<$scope.tasks.length; i++){
+        Tasks.editTask({_id:$scope.tasks[i]._id,
+                        name:$scope.tasks[i].name,
+                        deadline:$scope.tasks[i].deadline,
+                        assignedUser:"",
+                        assignedUserName:"unassigned"}, function(data, err) {
+                                                          $scope.errorMes = err;
+                                                        });
+      }
+    });
     Users.deleteUser(id, function(data, err) {
       $scope.errorMes = err;
       $scope.users.splice(index, 1);
     });
   };
 }]);
+
 
 function getBaseUrl(window) {
   var url = window.sessionStorage.baseurl || 'localhost:4000';
@@ -28,6 +41,7 @@ function deleteRequest(http, window, path) {
       cb(null, data);
     });
 }
+
 
 demoControllers.controller('TasksController', ['$scope', '$http', 'Tasks', '$window' , function($scope, $http,  Tasks, $window) {
   $scope.tasks = {};
@@ -196,12 +210,13 @@ demoControllers.controller('UserDetailController', ['$scope', '$http', 'Users', 
   $scope.loadCompleted = function() {
     Tasks.getCompletedUserTasks($routeParams.id, function(data) {
       $scope.completedTasks = data;
-      console.log($scope.completedTasks);
+      // console.log($scope.completedTasks);
     });
   };
 
   $scope.completeTask = function(index, task) {
-    Tasks.editTask({_id: task._id, name:task.name, deadline:task.deadline, completed: true}, function(data) {
+    Tasks.editTask({_id: task._id, description:task.description, name:task.name, deadline:task.deadline, completed:true}, function(data) {
+      // console.log(data);
       $scope.tasks.splice(index, 1);
     });
   };
