@@ -8,7 +8,7 @@
           Name: <input type="text" ng-model="newTask.name" />
           Description: <input type="text" ng-model="newTask.description" />
           <span ng-show="showMissingFields && !newTask.deadline" style="color: red">*</span>
-          Deadline: <datepicker><input ng-model="newTask.deadline" type="text"></datepicker>
+          Deadline: <input type="date" ng-model="task.deadline" />
           User:
           <select ng-model="selectedUser" />
             <option ng-repeat="user in users" value="{{$index}}">{{user.name}}</option>

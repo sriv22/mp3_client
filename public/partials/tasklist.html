@@ -1,5 +1,5 @@
 <div class="list" ng-controller='TasksController'>
-  {{errorMes}}
+  <!-- {{errorMes}} -->
   <div class="row">
     Tasks
 
@@ -39,11 +39,12 @@
   </div>
 
   <ul>
-    <!-- <li ng-repeat="task in tasks | pagination:curPage*10 | filter: {completed: taskRadioFilter} | limitTo:10"> -->
-    <li ng-repeat="task in tasks | pagination:curPage*10 | filter: {completed: taskRadioFilter} | orderBy:[fil,chron]| limitTo:10">
+    <!-- <li ng-repeat="task in tasks | pagination:curPage*10 | filter: {completed: taskRadioFilter} | limitTo:10"> pagination:curPage*10  -->
+    <li ng-repeat="task in tasks | pagination:curPage*10 |filter: {completed: taskRadioFilter} | orderBy:[fil,chron]| limitTo:10">
       <div class="row">
         <div class="small-4 columns">
-          <a href="#/taskDetails/{{task._id}}"<span ng-bind="task.name"></span></a>
+          <!-- <a href="#/taskDetails/{{task._id}}"<span ng-bind="task.name"></span></a> -->
+          <a href="#/tasklist/{{task._id}}"><div class="task-name"> {{task.name}}</div></a>
         </div>
         <div class="small-5 columns">
           <span ng-bind="task.assignedUser"></span>

@@ -12,17 +12,18 @@
   </div>
 
   <div class="row" ng-repeat="task in tasks">
-    <div class="small-4 columns"><a href="#/taskDetails/{{task._id}}">{{task.name}}</a></div>
+    <div class="small-4 columns"><a href="#/tasklist/{{task._id}}">{{task.name}}</a></div>
     <div class="small-4 columns">{{task.description}}</div>
-    <div class="small-4 columns"><button class="button tiny" ng-click="completeTask($index, task._id)">Complete</button></div>
+    <div class="small-4 columns"><button class="button tiny" ng-click="completeTask($index, task)">Complete</button></div>
   </div>
-
-  <div class="row"><button class="button default" ng-click="loadCompleted()">Load Completed</button></div>
+  
+  <hr>
+  <div class="row"><button class="button default" ng-click="loadCompleted()">Completed Tasks</button></div>
 
   <div class="row" ng-repeat="task in completedTasks">
-    <div class="small-4 columns"><a href="#/taskDetails/{{task._id}}">{{task.name}}</a></div>
+    <div class="small-4 columns"><a href="#/tasklist/{{task._id}}">{{task.name}}</a></div>
     <div class="small-4 columns">{{task.description}}</div>
-    <div class="small-4 columns"><button class="button tiny" ng-click="completeTask(task._id)">Complete</button></div>
+    <div> </div>
   </div>
 
 </div>

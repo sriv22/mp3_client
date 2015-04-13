@@ -12,17 +12,6 @@ demoControllers.controller('UsersController', ['$scope', '$http', 'Users', '$win
       $scope.users.splice(index, 1);
     });
   };
-
-  // $scope.nextPage = function() {
-  //   if($scope.curPage * 10 >= $scope.users.length) return;
-  //   $scope.curPage += 1;
-  // };
-
-  // $scope.prevPage = function() {
-  //   if($scope.curPage === 0) return;
-  //   $scope.curPage -= 1;
-  // };
-
 }]);
 
 function getBaseUrl(window) {
@@ -64,7 +53,7 @@ demoControllers.controller('TasksController', ['$scope', '$http', 'Tasks', '$win
     }
   });
 
-  Tasks.get().success(function(data){
+  Tasks.get().success(function(data, err){
     $scope.tasks = data['data'];
     $scope.errorMes = err;
   });
@@ -85,8 +74,96 @@ demoControllers.controller('TasksController', ['$scope', '$http', 'Tasks', '$win
       $scope.tasks.splice(index, 1);
     });
   };
-
 }]);
+
+demoControllers.controller('TaskDetailController', ['$scope', '$http', 'Tasks', '$routeParams','$window' , function($scope, $http, Tasks, $routeParams, $window) {
+  Tasks.getTask($routeParams.id, function(task){
+    $scope.task = task;
+  });
+}]);
+
+
+
+demoControllers.controller('NewTaskController', ['$scope', 'Tasks', 'Users', function($scope, Tasks, Users) {
+  $scope.newTask = {};
+  $scope.displayText = " ";
+  $scope.users = [];
+  $scope.selectedUser = -1;
+  $scope.showMissingFields = false;
+
+  Users.getSparseUsers(function(data, err) {
+    $scope.users = data;
+    $scope.errorMes = err;
+  });
+
+  $scope.createTask = function() {
+    if(!$scope.newTask.name || !$scope.newTask.deadline) {
+      $scope.showMissingFields = true;
+      return;
+    }
+
+    $scope.newTask.completed = false;
+
+    if($scope.selectedUser !== -1) {
+      $scope.newTask.assignedUser = $scope.users[$scope.selectedUser]._id;
+      $scope.newTask.assignedUserName = $scope.users[$scope.selectedUser].name;
+    }
+    else {
+      $scope.newTask.assignedUser = 'default';
+      $scope.newTask.assignedUserName = 'unassigned';
+    }
+
+    Tasks.newTask($scope.newTask, function(data, err) {
+      $scope.errorMes = err;
+      $scope.selectedUser = -1;
+      $scope.newTask = {};
+      $scope.displayText = "Task Created!";
+    });
+  };
+}]);
+
+demoControllers.controller('EditTaskController', ['$scope', '$routeParams', 'Tasks', 'Users', function($scope, $routeParams, Tasks, Users) {
+  $scope.showMissingFields = true;
+  $scope.selectedUser = -1;
+  $scope.displayText = " ";
+  var oldUser = "";
+
+  Tasks.getTask($routeParams.id, function(task, err) {
+    $scope.task = task;
+    $scope.task.deadline = new Date(task.deadline);
+    $scope.errorMes = err;
+
+    Users.getSparseUsers(function(users, err) {
+      $scope.errorMes = err;
+      $scope.users = users;
+      for(var i = 0; i < $scope.users.length; i++) {
+        if($scope.users[i].name === $scope.task.assignedUserName) {
+          $scope.selectedUser = i;
+          break;
+        }
+      }
+    });
+  });
+
+  $scope.editTask = function() {
+
+    if(!$scope.task.name || !$scope.task.deadline) {
+      $scope.showMissingFields = true;
+      return;
+    }
+
+    if($scope.selectedUser !== -1) {
+      $scope.task.assignedUser = $scope.users[$scope.selectedUser]._id;
+      $scope.task.assignedUserName = $scope.users[$scope.selectedUser].name;
+    }
+
+    Tasks.editTask($scope.task, function(data, err) {
+      $scope.errorMes = err;
+    });
+    $scope.displayText = "Task Updated!";
+  };
+}]);
+
 
 demoControllers.controller('AddUserController', ['$scope', '$http', 'Users', '$window', function($scope, $http, Users, $window) {
   $scope.displayText = " ";
@@ -97,14 +174,16 @@ demoControllers.controller('AddUserController', ['$scope', '$http', 'Users', '$w
     Users.addUser($scope.newUser).success(function(data) {
       console.log(data);
       $scope.response = data;
-      console.log($scope.response);
+      // console.log($scope.response);
       $scope.displayText = $scope.response['message'];
     });
   };
 }]);
 
 demoControllers.controller('UserDetailController', ['$scope', '$http', 'Users', 'Tasks', '$routeParams','$window', function($scope, $http, Users, Tasks, $routeParams, $window) {
-  console.log("inside userdetail controller");
+  // console.log("inside userdetail controller");
+  $scope.completedTasks = [];
+
   Users.getUser($routeParams.id, function(user) {
      $scope.user = user;
      console.log(user);
@@ -114,27 +193,20 @@ demoControllers.controller('UserDetailController', ['$scope', '$http', 'Users', 
     });
   });
 
-  // $scope.loadCompleted = function() {
-  //   Tasks.getCompletedUserTasks($routeParams.id, function(data, err) {
-  //     $scope.completedTasks = data;
-  //     $scope.errorMes = err;
-  //   });
-  // };
+  $scope.loadCompleted = function() {
+    Tasks.getCompletedUserTasks($routeParams.id, function(data) {
+      $scope.completedTasks = data;
+      console.log($scope.completedTasks);
+    });
+  };
 
-  // $scope.completeTask = function(index, id) {
-  //   Tasks.editTask({_id: id, completed: true}, function(data, err) {
-  //     $scope.errorMes = err;
-  //     $scope.tasks.splice(index, 1);
-  //   });
-  // };
+  $scope.completeTask = function(index, task) {
+    Tasks.editTask({_id: task._id, name:task.name, deadline:task.deadline, completed: true}, function(data) {
+      $scope.tasks.splice(index, 1);
+    });
+  };
 }]);
 
-demoControllers.controller('LlamaListController', ['$scope', '$http', 'Llamas', '$window' , function($scope, $http,  Llamas, $window) {
-
-  Llamas.get().success(function(data){
-    $scope.llamas = data;
-  });
-}]);
 
 demoControllers.controller('SettingsController', ['$scope' , '$window' , function($scope, $window) {
   $scope.url = $window.sessionStorage.baseurl;
@@ -145,7 +217,7 @@ demoControllers.controller('SettingsController', ['$scope' , '$window' , functio
   };
 }]);
 
-demoControllers.filter('pagination', function(){
+demoControllers.filter('pagination', function() {
   return function(input, start) {
     start = parseInt(start, 10);
     return input.slice(start);
